@@ -24,6 +24,21 @@ export const metadata = {
     "marketing strategy",
     "visual identity"
   ],
+  openGraph: {
+    type: 'website',
+    url: 'https://two14inc.com/',
+    title: 'Two14 Inc | Elevate Your Brand',
+    description:
+      'Two14 Inc is a creative agency that specializes in brand growth through strategic storytelling and design expertise. We help businesses elevate their brand identity and connect with their audience.',
+    siteName: 'Two14Inc',
+    images: [
+      {
+        url: '/t14inc-logo.svg',
+        width: 279,
+        height: 279,
+      },
+    ],
+  },
   // authors: [{ name: "Two14 Inc" }],
   // creator: "Two14 Inc",
 };
