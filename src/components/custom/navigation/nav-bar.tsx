@@ -43,9 +43,9 @@ function NavigationBar() {
                     <Link href={'#services'}>
                         <li className='cursor-pointer p-2 border-b-2 border-transparent hover:border-[#FFA63A]'>Services</li>
                     </Link>
-                    {/* <Link href={'#contact'}>
+                    <Link href={'#contact'}>
                         <li className='cursor-pointer'>Contact</li>
-                    </Link> */}
+                    </Link>
                     <Link href={'#about'}>
                         <li className='cursor-pointer p-2 border-b-2 border-transparent hover:border-[#FFA63A]'>About</li>
                     </Link>
@@ -66,6 +66,9 @@ function NavigationBar() {
                                 </Link>
                                 <Link href={'#services'} className='w-full'>
                                     <li className='cursor-pointer'>Services</li>
+                                </Link>
+                                <Link href={'#contact'} className='w-full'>
+                                    <li className='cursor-pointer'>Contact</li>
                                 </Link>
                             </ul>
 

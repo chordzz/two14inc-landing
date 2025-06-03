@@ -1,6 +1,12 @@
+'use client'
+
+
+import { FormEvent, useRef, useState } from "react";
+import Image from "next/image";
+import emailjs from '@emailjs/browser'
+
 import NavigationBar from "@/components/custom/navigation/nav-bar";
 import { Button } from "@/components/ui/button";
-import Image from "next/image";
 
 
 import aboutImg from '@/../public/two14-about.png'
@@ -12,9 +18,63 @@ import ServiceCard from "@/components/custom/service-card";
 import PeculiarityCard from "@/components/custom/peculiarity-card";
 import Footer from "@/components/custom/navigation/footer";
 import Link from "next/link";
+// import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import 'react-phone-number-input/style.css'
+import PhoneInput, {
+  isPossiblePhoneNumber,
+	// formatPhoneNumber,
+	// formatPhoneNumberIntl,
+	// isPossiblePhoneNumber,
+	// isValidPhoneNumber
+} from 'react-phone-number-input'
 
 
 export default function Home() {
+
+  const form = useRef<HTMLFormElement>(null);
+  const [value, setValue] = useState<string | undefined>('');
+  const [loading, setLoading] = useState<boolean>(false);
+
+  const handleSendEmail = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    if(!value){
+      alert('Please enter a valid phone number.');
+      return;
+    } else if (!isPossiblePhoneNumber(value)) {
+      alert('Please enter a valid phone number.');
+      return;
+    }
+    setLoading(true);
+    // console.log(value)
+    // console.log(value && isPossiblePhoneNumber(value))
+    
+    // if (form.current) {
+    //   const formData = new FormData(form.current);
+    //   const data = Object.fromEntries(formData.entries());
+    //   console.log('form values', data);
+    // }
+
+    if (form.current) {
+      emailjs.sendForm(process.env.NEXT_PUBLIC_SERVICE_ID || '', process.env.NEXT_PUBLIC_TEMPLATE_ID || '', form.current, process.env.NEXT_PUBLIC_PUBLIC_KEY || '')
+      .then(() => {
+        setLoading(false);
+        alert('Your message has been sent successfully!');
+        form.current?.reset()
+        setValue('')
+      }
+      , (error) => {
+        setLoading(false);
+        console.error('Email sending error:', error);
+        alert('Failed to send your message. Please try again later.');
+      }
+      );
+    } else {
+      alert('Something went wrong. Please try again later.');
+    }
+  }
   return (
     <div className="w-screen">
       {/* <NavigationBar /> */}
@@ -39,6 +99,7 @@ export default function Home() {
           </div>
         </div>
       </section> */}
+
       <section id="home" className="hero-bg bg-size-[425px] md:bg-size-[1000px_650px] md:bg-[position:top] lg:bg-cover h-screen text-white flex flex-col">
         <NavigationBar />
 
@@ -55,7 +116,7 @@ export default function Home() {
               </p>
 
               <div className="flex gap-6">
-                <Link href={'mailto:info@two14inc.com'}>
+                <Link href={'#contact'}>
                   <Button className="bg-[#F5871E]">Let&apos;s talk</Button>
                 </Link>
                 {/* <Button className="bg-[#E3E3E3] text-black">See our work</Button> */}
@@ -160,6 +221,50 @@ export default function Home() {
               peculiarities.map( (peculiarity, idx) => <PeculiarityCard key={idx} peculiarity={peculiarity} />)
             }
           </div>
+        </div>
+      </section>
+
+      <section id="contact">
+        <div className="content-wrapper mt-36">
+          <div className="w-[90%] md:w-[70%] lg::w-[60%] text-center mx-auto">
+            <h2 className="text-2xl md:text-3xl lg:text-4xl font-extrabold md:leading-[100%] uppercase">
+              Contact Us
+            </h2>
+            <p className="text-lg md:text-xl lg:text-2xl font-normal md:leading-[130%] mt-2 md:mt-5">
+              Send us a message. We&apos;d love to hear from you.
+            </p>
+          </div>
+
+          <form onSubmit={handleSendEmail} ref={form} className="border border-[#D9D9D9] rounded-[15px] shadow-[4px_4px_20px_rgba(0,0,0,0.06)] w-[90%] md:w-[70%] lg:w-[50%] xl:w-[40%] mx-auto p-6 md:p-8 my-8 flex flex-col gap-6">
+
+            <Input type="text" id="name" name="name" placeholder="Full Name" className="bg-[#f5f5f5] border-0 py-5" required />
+            
+            <Input type="email" id="email" name="email" placeholder="Email" className="bg-[#f5f5f5] border-0 py-5" required />
+
+            {/* <Input type="email" id="email" name="email" placeholder="Email" className="bg-[#f5f5f5] border-0 py-5" required /> */}
+
+            <PhoneInput
+              international
+              countryCallingCodeEditable={false}
+              placeholder="Enter phone number"
+              value={value}
+              onChange={setValue}
+              inputComponent={Input}
+              defaultCountry="US"
+              type="tel"
+              name="phone"
+              required
+              // isValid={isPossiblePhoneNumber}
+              // error={value ? (isValidPhoneNumber(value) ? undefined : 'Invalid phone number') : 'Phone number required'}
+            />
+
+            <Textarea placeholder="Type your message here." name="message" className="bg-[#f5f5f5] border-0" required />
+
+            <Button disabled={loading} className="bg-[#F5871E] text-white" type="submit">
+              {loading ? 'Sending...' : 'Send Message'}
+            </Button>
+
+          </form>
         </div>
       </section>
 

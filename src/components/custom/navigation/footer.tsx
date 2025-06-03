@@ -24,6 +24,9 @@ function Footer() {
                     <Link href={'#services'}>
                         <li className="cursor-pointer">Services</li>
                     </Link>
+                    <Link href={'#contact'}>
+                        <li className="cursor-pointer">Contact us</li>
+                    </Link>
                     {/* <li className="cursor-pointer">Contact</li> */}
                 </ul>
 
